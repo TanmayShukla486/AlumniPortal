@@ -12,6 +12,7 @@ public interface JwtServiceInterface {
 
     Claims extractAllClaims(String token);
     String extractUsername(String token);
+    String extractRole(String token);
     <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
     Date getExpiration(String token);
     boolean validateToken(String token, UserDetails userDetails);

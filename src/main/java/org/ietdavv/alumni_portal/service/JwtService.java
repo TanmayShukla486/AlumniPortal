@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.ietdavv.alumni_portal.entity.Role;
 import org.ietdavv.alumni_portal.service.interfaces.JwtServiceInterface;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Service
 public class JwtService implements JwtServiceInterface {
 
     private final String secretKey;
@@ -49,6 +51,11 @@ public class JwtService implements JwtServiceInterface {
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    @Override
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     @Override
