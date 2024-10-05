@@ -2,8 +2,12 @@ package org.ietdavv.alumni_portal.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "portal_user")
@@ -33,11 +37,24 @@ public class PortalUser {
     private String password;
     @Column(name = "bio", columnDefinition = "text")
     private String bio;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Achievement> achievements;
     @OneToOne(mappedBy = "user")
     private AlumniDetails alumniDetails;
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> following;
+    @OneToMany(mappedBy = "following")
+    private Set<Follow> followers;
+    @OneToMany(mappedBy = "author") // only possible if you are an author
+    private List<Blog> blogs;
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, columnDefinition = "timestamptz default now()")
+    private Timestamp createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false, columnDefinition = "timestamptz default now()")
+    private Timestamp updatedAt;
 
 }
