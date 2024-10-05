@@ -18,8 +18,6 @@ public class AlumniDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detail_id")
     private Long id;
-    @Column(name = "graduation_year")
-    private int graduationYear;
     @OneToMany(mappedBy = "alumni")
     private List<Company> companies;
     @OneToOne(cascade = CascadeType.ALL)
