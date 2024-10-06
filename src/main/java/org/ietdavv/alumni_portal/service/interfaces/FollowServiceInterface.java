@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface FollowServiceInterface {
 
-    ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowers(long userId);
-    ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowing(long userId);
-    ResponseEntity<ResponseDTO<String>> followUser(long toBeFollowed);
-    ResponseEntity<ResponseDTO<String>> unFollowUser(long unfollowId);
-    ResponseEntity<ResponseDTO<Long>> getFollowerCount(long userId);
-    ResponseEntity<ResponseDTO<Long>> getFollowingCount(long userId);
+    ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowers(String userId);
+    ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowing(String userId);
+    ResponseEntity<ResponseDTO<String>> followUser(String toBeFollowed);
+    ResponseEntity<ResponseDTO<String>> unFollowUser(String unfollowId);
+    ResponseEntity<ResponseDTO<Long>> getFollowerCount(String userId);
+    ResponseEntity<ResponseDTO<Long>> getFollowingCount(String userId);
 
 }
