@@ -11,6 +11,6 @@ public interface ReplyServiceInterface {
     ResponseEntity<ResponseDTO<List<ReplyDTO>>> getRepliesByComment(long commentId);
     ResponseEntity<ResponseDTO<String>> addReply(ReplyDTO reply);
     ResponseEntity<ResponseDTO<String>> deleteReply(long replyId);
-    ResponseEntity<ResponseDTO<List<ReplyDTO>>> getReplyByUserAndComment(long commentId, long userId);
+    ResponseEntity<ResponseDTO<List<ReplyDTO>>> getReplyByUserAndComment(long commentId, String username);
 
 }
