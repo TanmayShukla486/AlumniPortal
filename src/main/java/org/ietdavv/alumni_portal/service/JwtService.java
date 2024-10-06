@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.entity.Role;
 import org.ietdavv.alumni_portal.service.interfaces.JwtServiceInterface;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -81,13 +82,13 @@ public class JwtService implements JwtServiceInterface {
     }
 
     @Override
-    public String generateToken(String username, Role role) {
+    public String generateToken(PortalUser user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role.name());
+        claims.put("role", user.getRole().name());
         return Jwts.builder()
                 .claims()
                 .add(claims)
-                .subject(username)
+                .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
                 .and()

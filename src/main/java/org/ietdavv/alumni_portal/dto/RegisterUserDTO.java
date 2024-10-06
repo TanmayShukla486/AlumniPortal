@@ -19,8 +19,10 @@ public class RegisterUserDTO {
     private String firstName;
     private String lastName;
     private String middleName;
+    private String bio;
     private String role;
     private int graduationYear;
     private List<CompanyDTO> companies;
+    private List<AchievementDTO> achievements;
 
 }
