@@ -13,5 +13,7 @@ public class ResponseMessage {
     public static final String REPLY_DELETED="Reply deleted successfully";
     public static final String CATEGORY_NOT_FOUND="No such category found";
     public static final String CATEGORY_DELETED="Category deleted successfully";
+    public static final String COMMENT_ADDED="Comment added successfully";
+    public static final String COMMENT_DELETED="Comment deleted successfully";
 
 }

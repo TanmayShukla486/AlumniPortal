@@ -9,8 +9,8 @@ import java.util.List;
 public interface CommentServiceInterface {
 
     ResponseEntity<ResponseDTO<List<CommentDTO>>> getCommentsOnBlog(long blogId);
-    ResponseEntity<ResponseDTO<CommentDTO>> addComment(long blogId);
+    ResponseEntity<ResponseDTO<CommentDTO>> addComment(CommentDTO dto);
     ResponseEntity<ResponseDTO<String>> deleteComment(long commentId);
-    ResponseEntity<ResponseDTO<List<CommentDTO>>> getCommentByBlogAndUser(long blogId, long userId);
+    ResponseEntity<ResponseDTO<List<CommentDTO>>> getCommentByBlogAndUser(long blogId, String username);
 
 }
