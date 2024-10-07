@@ -1,6 +1,7 @@
 package org.ietdavv.alumni_portal.service.interfaces;
 
 import io.jsonwebtoken.Claims;
+import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.entity.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,5 +19,5 @@ public interface JwtServiceInterface {
     boolean validateToken(String token, UserDetails userDetails);
     boolean isExpired(String token);
     SecretKey getSecretKey();
-    String generateToken(String username, Role role);
+    String generateToken(PortalUser user);
 }

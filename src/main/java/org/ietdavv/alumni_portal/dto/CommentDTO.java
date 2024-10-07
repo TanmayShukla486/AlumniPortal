@@ -14,6 +14,8 @@ import java.util.List;
 @Builder
 public class CommentDTO {
 
+    private long blogId;
+    private long commentId;
     private String username;
     private String content;
     private List<ReplyDTO> replies;
@@ -21,6 +23,8 @@ public class CommentDTO {
 
     public static CommentDTO mapToDTO(Comment comment) {
         return CommentDTO.builder()
+                .blogId(comment.getBlog().getId())
+                .commentId(comment.getId())
                 .content(comment.getContent())
                 .replies(comment.getReplies().stream().map(ReplyDTO::mapToDTO).toList())
                 .likes(comment.getLikes().size())

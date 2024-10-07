@@ -3,6 +3,7 @@ package org.ietdavv.alumni_portal.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.ietdavv.alumni_portal.dto.AchievementDTO;
 
 @Entity
 @Table(name = "achievement")
@@ -10,6 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
 public class Achievement {
 
@@ -24,5 +26,12 @@ public class Achievement {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private PortalUser user;
+
+    public static Achievement mapToEntity(AchievementDTO dto) {
+        return Achievement.builder()
+                .achievementTitle(dto.getTitle())
+                .achievementContent(dto.getContent())
+                .build();
+    }
 
 }

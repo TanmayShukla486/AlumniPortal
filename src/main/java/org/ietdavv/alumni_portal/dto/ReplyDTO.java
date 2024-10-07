@@ -14,12 +14,14 @@ public class ReplyDTO {
     private String username;
     private String content;
     private int likes;
+    private long commentId;
 
     public static ReplyDTO mapToDTO(Reply reply) {
         return ReplyDTO.builder()
                 .username(reply.getReplier().getUsername())
                 .content(reply.getContent())
-                .likes(reply.getLikes().size())
+                .likes((reply.getLikes() != null) ? reply.getLikes().size() : 0)
+                .commentId(reply.getComment().getId())
                 .build();
     }
 

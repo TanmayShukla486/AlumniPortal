@@ -1,15 +1,18 @@
 package org.ietdavv.alumni_portal.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.ietdavv.alumni_portal.dto.CompanyDTO;
 
 @Entity
 @Table(name = "company_details")
 @Getter
 @Setter
 @ToString
+@Builder
 public class Company {
 
     @Id
@@ -26,4 +29,11 @@ public class Company {
     @JoinColumn(name = "user_id")
     private AlumniDetails alumni;
 
+    public static Company mapToEntity(CompanyDTO dto) {
+        return Company.builder()
+                .name(dto.getCompany())
+                .currentlyWorking(dto.isCurrentlyWorking())
+                .timeSpent(dto.getTimeSpent())
+                .build();
+    }
 }

@@ -26,6 +26,7 @@ public class UserDTO {
     private boolean isAlumni;
     private AlumniDetailsDTO details;
     private List<FollowDTO> followers;
+    private List<AchievementDTO> achievements;
     private List<FollowDTO> following;
 
     public static UserDTO mapToDTO(PortalUser user) {
@@ -42,6 +43,7 @@ public class UserDTO {
                 .followers(followers)
                 .following(following)
                 .details(AlumniDetailsDTO.mapToDTO(user.getAlumniDetails()))
+                .achievements(user.getAchievements().stream().map(AchievementDTO::mapToDTO).toList())
                 .build();
     }
 
