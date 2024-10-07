@@ -15,5 +15,7 @@ public class ResponseMessage {
     public static final String CATEGORY_DELETED="Category deleted successfully";
     public static final String COMMENT_ADDED="Comment added successfully";
     public static final String COMMENT_DELETED="Comment deleted successfully";
+    public static final String BLOG_CREATED="Blog created successfully";
 
+    public static final String BLOG_DELETED="Blog deleted successfully";
 }
