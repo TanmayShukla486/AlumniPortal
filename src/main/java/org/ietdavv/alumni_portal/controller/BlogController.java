@@ -5,6 +5,7 @@ import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,11 +34,13 @@ public class BlogController {
     }
 
     @PostMapping("/blog")
+    @PreAuthorize("hasRole('ROLE_ALUMNI')")
     public ResponseEntity<ResponseDTO<String>> postBlog(@RequestBody BlogDTO blog) {
         return blogService.postBlog(blog);
     }
 
     @DeleteMapping("/blog")
+    @PreAuthorize("hasAnyRole('ROLE_ALUMNI', 'ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO<String>> deleteBlog(@PathVariable(name = "id") Long blogId) {
         return blogService.deleteBlog(blogId);
     }

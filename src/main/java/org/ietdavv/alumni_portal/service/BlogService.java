@@ -6,6 +6,7 @@ import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Blog;
 import org.ietdavv.alumni_portal.entity.Category;
 import org.ietdavv.alumni_portal.entity.PortalUser;
+import org.ietdavv.alumni_portal.entity.Role;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
 import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
@@ -154,6 +155,8 @@ public class BlogService implements BlogServiceInterface {
                 )
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
         if (blog.getAuthor().equals(user))
+            blogRepository.delete(blog);
+        else if (user.getRole().equals(Role.ROLE_ALUMNI))
             blogRepository.delete(blog);
         else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
