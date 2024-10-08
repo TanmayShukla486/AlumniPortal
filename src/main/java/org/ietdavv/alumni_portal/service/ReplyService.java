@@ -55,7 +55,9 @@ public class ReplyService implements ReplyServiceInterface {
     public ResponseEntity<ResponseDTO<String>> addReply(ReplyDTO reply) {
 
         PortalUser user = userRepository
-                .findByUsername(reply.getUsername())
+                .findByUsername(
+                        SecurityContextHolder.getContext().getAuthentication().getName()
+                )
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
         Comment comment = commentRepository
                 .findById(reply.getCommentId())
@@ -87,7 +89,7 @@ public class ReplyService implements ReplyServiceInterface {
                         SecurityContextHolder.getContext().getAuthentication().getName()
                 )
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
-        if (reply.getComment().getCommenter().equals(user))
+        if (reply.getReplier().equals(user))
             replyRepository.delete(reply);
         else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
