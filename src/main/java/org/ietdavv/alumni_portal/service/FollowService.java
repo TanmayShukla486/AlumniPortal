@@ -106,7 +106,7 @@ public class FollowService implements FollowServiceInterface {
         return ResponseEntity.ok(ResponseDTO.<String>builder()
                 .statusCode(204)
                 .message(ResponseMessage.SUCCESS)
-                .data("Successfully unfollowed" + f2)
+                .data("Successfully unfollowed " + f2)
                 .build()
         );
     }
