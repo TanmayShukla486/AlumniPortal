@@ -65,13 +65,23 @@ public class CategoryService implements CategoryServiceInterface {
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(204)
-                        .message(ResponseMessage.)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(ResponseMessage.CATEGORY_DELETED)
                         .build()
         );
     }
 
     @Override
-    public ResponseEntity<ResponseDTO<Long>> getBlogCount(CategoryDTO category) {
-        return null;
+    public ResponseEntity<ResponseDTO<Long>> getBlogCount(String find) {
+        Category category = categoryRepository
+                .findByCategory(find)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
+        return ResponseEntity.ok(
+                ResponseDTO.<Long>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data((long) category.getBlogs().size())
+                        .build()
+        );
     }
 }

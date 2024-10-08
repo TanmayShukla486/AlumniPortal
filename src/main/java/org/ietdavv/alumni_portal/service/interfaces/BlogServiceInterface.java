@@ -10,6 +10,9 @@ public interface BlogServiceInterface {
 
     ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs();
     ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByCategory(String category);
+
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndCategory(String username, String category);
+
     ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthor(String username);
     ResponseEntity<ResponseDTO<String>> postBlog(BlogDTO blog);
     ResponseEntity<ResponseDTO<String>> deleteBlog(Long blogId);

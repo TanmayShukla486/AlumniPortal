@@ -65,6 +65,29 @@ public class BlogService implements BlogServiceInterface {
     }
 
     @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndCategory(String username, String category) {
+        Category cat = categoryRepository
+                .findByCategory(category)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
+        final PortalUser user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        List<BlogDTO> blogs = blogRepository
+                .findByAuthorAndCategory(user, cat)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                .stream()
+                .map(BlogDTO::mapToDTO)
+                .toList();
+        return ResponseEntity.ok(
+                ResponseDTO.<List<BlogDTO>>builder()
+                        .statusCode(200)
+                        .data(blogs)
+                        .message(ResponseMessage.SUCCESS)
+                        .build()
+        );
+    }
+
+    @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthor(String username) {
 
         final PortalUser user = userRepository

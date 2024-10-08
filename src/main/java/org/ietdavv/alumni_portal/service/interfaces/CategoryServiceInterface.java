@@ -11,6 +11,6 @@ public interface CategoryServiceInterface {
     ResponseEntity<ResponseDTO<List<CategoryDTO>>> getAllCategories();
     ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(CategoryDTO category);
     ResponseEntity<ResponseDTO<String>> removeCategory(String category);
-    ResponseEntity<ResponseDTO<Long>> getBlogCount(CategoryDTO category);
+    ResponseEntity<ResponseDTO<Long>> getBlogCount(String category);
 
 }
