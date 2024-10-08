@@ -10,9 +10,11 @@ import org.ietdavv.alumni_portal.repository.CategoryRepository;
 import org.ietdavv.alumni_portal.service.interfaces.CategoryServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CategoryService implements CategoryServiceInterface {
 
     private final BlogRepository blogRepository;
