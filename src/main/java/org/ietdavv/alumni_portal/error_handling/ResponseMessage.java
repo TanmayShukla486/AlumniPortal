@@ -18,4 +18,5 @@ public class ResponseMessage {
     public static final String BLOG_CREATED="Blog created successfully";
     public static final String UNAUTHORIZED="Lack authority for this task";
     public static final String BLOG_DELETED="Blog deleted successfully";
+    public static final String INVALID_ENTITY="Invalid Entity input";
 }
