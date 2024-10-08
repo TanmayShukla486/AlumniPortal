@@ -14,4 +14,5 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     Optional<List<Blog>> findByAuthor(PortalUser author);
 
+    Optional<List<Blog>> findByAuthorAndCategory(PortalUser author, Category category);
 }

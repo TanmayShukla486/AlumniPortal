@@ -8,12 +8,14 @@ import org.ietdavv.alumni_portal.entity.Comment;
 import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
+import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
 import org.ietdavv.alumni_portal.repository.BlogRepository;
 import org.ietdavv.alumni_portal.repository.CommentRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.CommentServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,7 +83,14 @@ public class CommentService implements CommentServiceInterface {
         Comment comment = commentRepository
                 .findById(commentId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.COMMENT_NOT_FOUND));
-        commentRepository.delete(comment);
+        PortalUser user = userRepository
+                .findByUsername(
+                        SecurityContextHolder.getContext().getAuthentication().getName()
+                )
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        if (comment.getCommenter().equals(user))
+            commentRepository.delete(comment);
+        else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(204)
