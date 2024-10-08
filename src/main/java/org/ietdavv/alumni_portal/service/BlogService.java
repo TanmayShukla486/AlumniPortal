@@ -8,12 +8,14 @@ import org.ietdavv.alumni_portal.entity.Category;
 import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
+import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
 import org.ietdavv.alumni_portal.repository.BlogRepository;
 import org.ietdavv.alumni_portal.repository.CategoryRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.BlogServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -146,7 +148,14 @@ public class BlogService implements BlogServiceInterface {
         Blog blog = blogRepository
                 .findById(blogId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND));
-        blogRepository.delete(blog);
+        PortalUser user = userRepository
+                .findByUsername(
+                        SecurityContextHolder.getContext().getAuthentication().getName()
+                )
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        if (blog.getAuthor().equals(user))
+            blogRepository.delete(blog);
+        else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(204)

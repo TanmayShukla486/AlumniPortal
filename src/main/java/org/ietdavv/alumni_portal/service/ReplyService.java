@@ -8,12 +8,14 @@ import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.entity.Reply;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
+import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
 import org.ietdavv.alumni_portal.repository.CommentRepository;
 import org.ietdavv.alumni_portal.repository.ReplyRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.ReplyServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,7 +82,14 @@ public class ReplyService implements ReplyServiceInterface {
         Reply reply = replyRepository
                 .findById(replyId)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.REPLY_NOT_FOUND));
-        replyRepository.delete(reply);
+        PortalUser user = userRepository
+                .findByUsername(
+                        SecurityContextHolder.getContext().getAuthentication().getName()
+                )
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        if (reply.getComment().getCommenter().equals(user))
+            replyRepository.delete(reply);
+        else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(204)
