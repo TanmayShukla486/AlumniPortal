@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.BlogDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Blog;
@@ -86,6 +87,7 @@ public class BlogService implements BlogServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<String>> postBlog(BlogDTO dto) {
 
         final PortalUser user = userRepository
@@ -115,6 +117,7 @@ public class BlogService implements BlogServiceInterface {
         );
     }
 
+    @Transactional
     @Override
     public ResponseEntity<ResponseDTO<String>> deleteBlog(Long blogId) {
         Blog blog = blogRepository

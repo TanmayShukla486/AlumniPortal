@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.CommentDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Blog;
@@ -48,6 +49,7 @@ public class CommentService implements CommentServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<CommentDTO>> addComment(CommentDTO dto) {
 
         PortalUser user = userRepository
@@ -74,6 +76,7 @@ public class CommentService implements CommentServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<String>> deleteComment(long commentId) {
         Comment comment = commentRepository
                 .findById(commentId)

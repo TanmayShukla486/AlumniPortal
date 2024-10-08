@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.FollowDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Follow;
@@ -66,6 +67,7 @@ public class FollowService implements FollowServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<String>> followUser(String toBeFollowed) {
         PortalUser following = userRepository
                 .findByUsername(toBeFollowed)
@@ -88,6 +90,7 @@ public class FollowService implements FollowServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<String>> unFollowUser(String f2) {
         String f1 = SecurityContextHolder.getContext().getAuthentication().getName();
         PortalUser follower = userRepository

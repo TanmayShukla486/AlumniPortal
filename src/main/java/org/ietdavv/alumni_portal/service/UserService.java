@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.*;
 import org.ietdavv.alumni_portal.entity.*;
 import org.ietdavv.alumni_portal.error_handling.errors.RoleNotFoundException;
@@ -31,6 +32,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<CompactUserDTO>> registerUser(RegisterUserDTO user) {
         Role role = switch (user.getRole()) {
             case "student" -> Role.ROLE_STUDENT;
