@@ -2,9 +2,7 @@ package org.ietdavv.alumni_portal.dto;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.ietdavv.alumni_portal.entity.AlumniDetails;
 import org.ietdavv.alumni_portal.entity.PortalUser;
-import org.ietdavv.alumni_portal.entity.Role;
 
 import java.util.List;
 

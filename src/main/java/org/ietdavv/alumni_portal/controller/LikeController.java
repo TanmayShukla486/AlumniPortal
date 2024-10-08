@@ -1,6 +1,5 @@
 package org.ietdavv.alumni_portal.controller;
 
-import org.hibernate.type.EntityType;
 import org.ietdavv.alumni_portal.dto.LikeDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.LikeEntity;

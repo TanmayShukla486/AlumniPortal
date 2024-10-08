@@ -1,7 +1,7 @@
 package org.ietdavv.alumni_portal.service.interfaces;
 
-import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.dto.CategoryDTO;
+import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

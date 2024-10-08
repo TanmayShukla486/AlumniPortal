@@ -7,9 +7,9 @@ import org.ietdavv.alumni_portal.entity.Like;
 import org.ietdavv.alumni_portal.entity.PortalUser;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
-import org.ietdavv.alumni_portal.repository.*;
+import org.ietdavv.alumni_portal.repository.LikeRepository;
+import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.LikeServiceInterface;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;

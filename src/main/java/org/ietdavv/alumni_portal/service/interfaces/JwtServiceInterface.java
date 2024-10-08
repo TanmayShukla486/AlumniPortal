@@ -2,7 +2,6 @@ package org.ietdavv.alumni_portal.service.interfaces;
 
 import io.jsonwebtoken.Claims;
 import org.ietdavv.alumni_portal.entity.PortalUser;
-import org.ietdavv.alumni_portal.entity.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
