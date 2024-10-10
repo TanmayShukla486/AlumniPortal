@@ -2,6 +2,7 @@ package org.ietdavv.alumni_portal.dto;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.ietdavv.alumni_portal.entity.AlumniDetails;
 import org.ietdavv.alumni_portal.entity.PortalUser;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class UserDTO {
         String role = user.getRole().name().substring(5);
         List<FollowDTO> followers = user.getFollowers().stream().map(FollowDTO::mapToDTO).toList();
         List<FollowDTO> following = user.getFollowing().stream().map(FollowDTO::mapToDTO).toList();
+        AlumniDetails deets = user.getAlumniDetails();
         return UserDTO.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
@@ -39,8 +41,9 @@ public class UserDTO {
                 .graduationYear(user.getGraduationYear())
                 .isAlumni(role.equals("ALUMNI"))
                 .followers(followers)
+                .username(user.getUsername())
                 .following(following)
-                .details(AlumniDetailsDTO.mapToDTO(user.getAlumniDetails()))
+                .details(deets != null ? AlumniDetailsDTO.mapToDTO(deets) : null)
                 .achievements(user.getAchievements().stream().map(AchievementDTO::mapToDTO).toList())
                 .build();
     }

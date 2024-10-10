@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserService implements UserServiceInterface {
     private final UserRepository repository;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Autowired
     public UserService(UserRepository repository, JwtService jwtService, AuthenticationManager authManager) {
@@ -47,7 +49,7 @@ public class UserService implements UserServiceInterface {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .password(user.getPassword())
+                .password(encoder.encode(user.getPassword()))
                 .bio(user.getBio())
                 .role(role)
                 .graduationYear(user.getGraduationYear());
