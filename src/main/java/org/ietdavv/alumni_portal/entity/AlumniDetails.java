@@ -19,7 +19,7 @@ public class AlumniDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "detail_id")
     private Long id;
-    @OneToMany(mappedBy = "alumni")
+    @OneToMany(mappedBy = "alumni", cascade = CascadeType.ALL)
     private List<Company> companies;
     @OneToOne(cascade = CascadeType.ALL)
     private PortalUser user;

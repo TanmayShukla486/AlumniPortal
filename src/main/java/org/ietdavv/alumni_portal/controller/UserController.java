@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ietdavv.alumni_portal.dto.*;
 import org.ietdavv.alumni_portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -24,6 +26,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO<CompactUserDTO>> registerUser(@RequestBody RegisterUserDTO dto) {
+        log.debug("Register Input: {}", dto.toString());
         return userService.registerUser(dto);
     }
 

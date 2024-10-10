@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.*;
 import org.ietdavv.alumni_portal.entity.*;
 import org.ietdavv.alumni_portal.error_handling.errors.RoleNotFoundException;
+import org.ietdavv.alumni_portal.repository.AlumniDetailsRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ public class UserService implements UserServiceInterface {
 
     private final UserRepository repository;
     private final JwtService jwtService;
+    private final AlumniDetailsRepository alumniDetailsRepository;
     private final AuthenticationManager authManager;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Autowired
-    public UserService(UserRepository repository, JwtService jwtService, AuthenticationManager authManager) {
+    public UserService(UserRepository repository, JwtService jwtService, AlumniDetailsRepository alumniDetailsRepository, AuthenticationManager authManager) {
         this.repository = repository;
         this.jwtService = jwtService;
+        this.alumniDetailsRepository = alumniDetailsRepository;
         this.authManager = authManager;
     }
 
@@ -53,27 +56,29 @@ public class UserService implements UserServiceInterface {
                 .bio(user.getBio())
                 .role(role)
                 .graduationYear(user.getGraduationYear());
+
+        PortalUser toBeSaved = builder.build();
         Optional.ofNullable(user.getAchievements())
                 .ifPresent(list -> {
                     List<Achievement> achievements = list.stream()
                             .map(Achievement::mapToEntity)
-                            .peek(achievement -> achievement.setUser(builder.build()))
+                            .peek(achievement -> achievement.setUser(toBeSaved))
                             .toList();
-                    builder.achievements(achievements);
+                    toBeSaved.setAchievements(achievements);
                 });
         Optional.ofNullable(user.getCompanies())
                 .ifPresent(list -> {
                     List<Company> companies = list.stream()
                             .map(Company::mapToEntity)
                             .toList();
-                    AlumniDetails details = AlumniDetails.builder()
+                    AlumniDetails alumniDetails = AlumniDetails.builder()
                             .companies(companies)
-                            .user(builder.build())
                             .build();
-                    details.getCompanies().forEach(company -> company.setAlumni(details));
-                    builder.alumniDetails(details);
+                    alumniDetails.setUser(toBeSaved);
+                    companies.forEach(company -> company.setAlumni(alumniDetails));
+                    toBeSaved.setAlumniDetails(alumniDetails);
+
                 });
-        PortalUser toBeSaved = builder.build();
         PortalUser saved = repository.save(toBeSaved);
         return ResponseEntity.ok(ResponseDTO.<CompactUserDTO>builder()
                 .statusCode(200)

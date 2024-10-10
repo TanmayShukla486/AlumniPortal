@@ -1,10 +1,7 @@
 package org.ietdavv.alumni_portal.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.ietdavv.alumni_portal.dto.CompanyDTO;
 
 @Entity
@@ -12,6 +9,8 @@ import org.ietdavv.alumni_portal.dto.CompanyDTO;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Company {
 

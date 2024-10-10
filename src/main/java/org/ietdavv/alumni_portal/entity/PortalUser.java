@@ -42,9 +42,9 @@ public class PortalUser {
     private Role role;
     @Column(name = "graduation_year")
     private int graduationYear;
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Achievement> achievements;
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private AlumniDetails alumniDetails;
     @OneToMany(mappedBy = "follower")
     private Set<Follow> following;
