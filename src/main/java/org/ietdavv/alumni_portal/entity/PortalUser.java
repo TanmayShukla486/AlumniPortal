@@ -58,5 +58,8 @@ public class PortalUser {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false, columnDefinition = "timestamptz default now()")
     private Timestamp updatedAt;
-
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.PERSIST)
+    private List<ChatRoom> sentChatRooms;
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.PERSIST)
+    private List<ChatRoom> receiverChatRoom;
 }
