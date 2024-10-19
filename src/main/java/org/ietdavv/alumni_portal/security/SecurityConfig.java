@@ -52,7 +52,6 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/login").permitAll()
                                 .requestMatchers("/api/user/register").permitAll()
                                 .anyRequest().authenticated()
-
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->

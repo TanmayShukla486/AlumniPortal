@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Setter
 @ToString
 @Builder
-@RequiredArgsConstructor
 public class Message implements Serializable {
 
     private String sender;
