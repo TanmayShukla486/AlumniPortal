@@ -51,6 +51,7 @@ public class SecurityConfig {
                         req
                                 .requestMatchers("/api/user/login").permitAll()
                                 .requestMatchers("/api/user/register").permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
