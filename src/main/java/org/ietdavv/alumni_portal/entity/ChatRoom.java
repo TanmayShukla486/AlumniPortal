@@ -9,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "chat_room_tbl")
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -18,16 +19,15 @@ public class ChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long id;
     @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    PortalUser sender;
-    @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    PortalUser receiver;
+    @Column(name = "sender_username")
+    private String sender;
+    @Column(name = "receiver_username")
+    private String receiver;
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Message> messages;
 }

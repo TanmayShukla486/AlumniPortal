@@ -18,6 +18,10 @@ public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "sender_username")
+    private String sender;
+    @Column(name = "receiver_username")
+    private String receiver;
     @Column(name = "message_content")
     @Lob
     private String content;
