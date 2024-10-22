@@ -58,5 +58,4 @@ public class PortalUser {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false, columnDefinition = "timestamptz default now()")
     private Timestamp updatedAt;
-
 }
