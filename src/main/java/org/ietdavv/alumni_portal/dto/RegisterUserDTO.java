@@ -23,6 +23,6 @@ public class RegisterUserDTO {
     private String role;
     private int graduationYear;
     private List<CompanyDTO> companies;
-    private List<AchievementDTO> achievements;
+//    private List<AchievementDTO> achievements;
 
 }

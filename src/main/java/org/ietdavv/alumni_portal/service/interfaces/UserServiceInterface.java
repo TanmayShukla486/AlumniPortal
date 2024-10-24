@@ -7,5 +7,5 @@ public interface UserServiceInterface {
 
     ResponseEntity<ResponseDTO<CompactUserDTO>> registerUser(RegisterUserDTO user);
     ResponseEntity<ResponseDTO<UserDTO>> getUserDetailsByUsername(String username);
-    ResponseEntity<ResponseDTO<String>> loginUser(LoginUserDTO user);
+    ResponseEntity<ResponseDTO<LoginResponseDTO>> loginUser(LoginUserDTO user);
 }

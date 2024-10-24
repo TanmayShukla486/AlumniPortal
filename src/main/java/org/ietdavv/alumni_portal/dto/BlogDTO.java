@@ -13,21 +13,23 @@ import java.util.List;
 @Builder
 public class BlogDTO {
 
+    private Long id;
     private String title;
     private String category;
+    private String color;
     private String author;
     private String content;
-    private List<CommentDTO> comments;
     private int likes;
     private boolean commentsEnabled;
 
     public static BlogDTO mapToDTO(Blog blog) {
         return BlogDTO.builder()
+                .id(blog.getId())
                 .title(blog.getTitle())
+                .color(blog.getCategory().getColor())
                 .author(blog.getAuthor().getUsername())
                 .content(blog.getContent())
                 .commentsEnabled(blog.isCommentsEnabled())
-                .comments(blog.getComments().stream().map(CommentDTO::mapToDTO).toList())
                 .likes(blog.getLikes().size())
                 .build();
     }
