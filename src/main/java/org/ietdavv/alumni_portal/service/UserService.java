@@ -24,15 +24,13 @@ public class UserService implements UserServiceInterface {
 
     private final UserRepository repository;
     private final JwtService jwtService;
-    private final AlumniDetailsRepository alumniDetailsRepository;
     private final AuthenticationManager authManager;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Autowired
-    public UserService(UserRepository repository, JwtService jwtService, AlumniDetailsRepository alumniDetailsRepository, AuthenticationManager authManager) {
+    public UserService(UserRepository repository, JwtService jwtService, AuthenticationManager authManager) {
         this.repository = repository;
         this.jwtService = jwtService;
-        this.alumniDetailsRepository = alumniDetailsRepository;
         this.authManager = authManager;
     }
 
@@ -40,9 +38,9 @@ public class UserService implements UserServiceInterface {
     @Transactional
     public ResponseEntity<ResponseDTO<CompactUserDTO>> registerUser(RegisterUserDTO user) {
         Role role = switch (user.getRole()) {
-            case "student" -> Role.ROLE_STUDENT;
-            case "alumni" -> Role.ROLE_ALUMNI;
-            case "admin" -> Role.ROLE_ADMIN;
+            case "STUDENT" -> Role.ROLE_STUDENT;
+            case "ALUMNI" -> Role.ROLE_ALUMNI;
+            case "ADMIN" -> Role.ROLE_ADMIN;
             default -> throw new RoleNotFoundException("Invalid role assigned");
         };
 
@@ -58,14 +56,14 @@ public class UserService implements UserServiceInterface {
                 .graduationYear(user.getGraduationYear());
 
         PortalUser toBeSaved = builder.build();
-        Optional.ofNullable(user.getAchievements())
-                .ifPresent(list -> {
-                    List<Achievement> achievements = list.stream()
-                            .map(Achievement::mapToEntity)
-                            .peek(achievement -> achievement.setUser(toBeSaved))
-                            .toList();
-                    toBeSaved.setAchievements(achievements);
-                });
+//        Optional.ofNullable(user.getAchievements())
+//                .ifPresent(list -> {
+//                    List<Achievement> achievements = list.stream()
+//                            .map(Achievement::mapToEntity)
+//                            .peek(achievement -> achievement.setUser(toBeSaved))
+//                            .toList();
+//                    toBeSaved.setAchievements(achievements);
+//                });
         Optional.ofNullable(user.getCompanies())
                 .ifPresent(list -> {
                     List<Company> companies = list.stream()
@@ -84,46 +82,44 @@ public class UserService implements UserServiceInterface {
                 .statusCode(200)
                 .message("Successful")
                 .data(CompactUserDTO.mapToDTO(saved))
-                .build()
-        );
+                            .build()
+                    );
 
-    }
+        }
 
-    @Override
-    public ResponseEntity<ResponseDTO<UserDTO>> getUserDetailsByUsername(String username) {
-        PortalUser user = repository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found"));
-        return ResponseEntity.ok(ResponseDTO.<UserDTO>builder()
-                .statusCode(200)
-                .message("Successful")
-                .data(UserDTO.mapToDTO(user))
-                .build()
-        );
-    }
-
-    @Override
-    public ResponseEntity<ResponseDTO<String>> loginUser(LoginUserDTO user) {
-        Authentication authentication = authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
-        );
-        if (authentication.isAuthenticated()) {
-            PortalUser portalUser = repository
-                    .findByUsername(user.getUsername())
+        @Override
+        public ResponseEntity<ResponseDTO<UserDTO>> getUserDetailsByUsername(String username) {
+            PortalUser user = repository
+                    .findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("No user found"));
-            return ResponseEntity.ok(ResponseDTO.<String>builder()
+            return ResponseEntity.ok(ResponseDTO.<UserDTO>builder()
                     .statusCode(200)
-                    .message("Login successful")
-                    .data(jwtService.generateToken(portalUser))
+                    .message("Successful")
+                    .data(UserDTO.mapToDTO(user))
                     .build()
             );
         }
-        return ResponseEntity.badRequest().body(
-                ResponseDTO.<String>builder()
-                        .statusCode(401)
-                        .message("Invalid credentials")
-                        .data("Could not login user with the given credential. Recheck and try again")
-                        .build()
-        );
+
+        @Override
+        public ResponseEntity<ResponseDTO<LoginResponseDTO>> loginUser(LoginUserDTO user) {
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+                PortalUser portalUser = repository
+                        .findByUsername(user.getUsername())
+                        .orElseThrow(() -> new UsernameNotFoundException("No user found"));
+                String token = jwtService.generateToken(portalUser);
+                return ResponseEntity.ok(ResponseDTO.<LoginResponseDTO>builder()
+                        .statusCode(200)
+                        .message("Login successful")
+                        .data(LoginResponseDTO.builder()
+                                .username(user.getUsername())
+                                .token(token)
+                                .refreshToken(null)
+                                .role(jwtService.extractRole(token).substring(5))
+                                .build())
+                    .build()
+            );
+
     }
 }
