@@ -45,7 +45,7 @@ public class CategoryService implements CategoryServiceInterface {
     @Override
     public ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(CategoryDTO category) {
         Category toBeSaved = Category.builder()
-                .category(category.getCategoryTitle())
+                .category(category.getTitle())
                 .color(category.getColor())
                 .build();
         CategoryDTO saved = CategoryDTO.mapToDTO(categoryRepository.save(toBeSaved));

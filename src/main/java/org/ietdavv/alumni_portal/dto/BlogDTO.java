@@ -28,6 +28,7 @@ public class BlogDTO {
                 .title(blog.getTitle())
                 .color(blog.getCategory().getColor())
                 .author(blog.getAuthor().getUsername())
+                .category(blog.getCategory().getCategory())
                 .content(blog.getContent())
                 .commentsEnabled(blog.isCommentsEnabled())
                 .likes(blog.getLikes().size())

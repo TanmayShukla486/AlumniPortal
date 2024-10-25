@@ -89,7 +89,7 @@ public class JwtService implements JwtServiceInterface {
                 .add(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15 *1000))
                 .and()
                 .signWith(getSecretKey())
                 .compact();

@@ -115,15 +115,15 @@ public class BlogService implements BlogServiceInterface {
     @Override
     @Transactional
     public ResponseEntity<ResponseDTO<String>> postBlog(BlogDTO dto) {
-
+        final String username = SecurityContextHolder.getContext().getAuthentication().getName();
         final PortalUser user = userRepository
-                .findByUsername(dto.getAuthor())
+                .findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
 
         final Category category = categoryRepository
                 .findByCategory(dto.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
-
+        System.out.println(category.toString());
         Blog blog = Blog.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())

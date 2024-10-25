@@ -11,12 +11,12 @@ import org.ietdavv.alumni_portal.entity.Category;
 @Builder
 public class CategoryDTO {
 
-    private String categoryTitle;
+    private String title;
     private String color;
 
     public static CategoryDTO mapToDTO(Category category) {
         return CategoryDTO.builder()
-                .categoryTitle(category.getCategory())
+                .title(category.getCategory())
                 .color(category.getColor())
                 .build();
     }
