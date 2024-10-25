@@ -23,7 +23,7 @@ public class CommentDTO {
                 .blogId(comment.getBlog().getId())
                 .id(comment.getId())
                 .content(comment.getContent())
-                .likes(comment.getLikes().size())
+                .likes(comment.getLikes() != null ? comment.getLikes().size() : 0)
                 .username(comment.getCommenter().getUsername())
                 .build();
     }

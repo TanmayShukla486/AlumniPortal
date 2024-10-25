@@ -6,6 +6,7 @@ import org.ietdavv.alumni_portal.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,11 @@ public class BlogController {
             return blogService.getBlogsByAuthorAndCategory(username, category);
         else if (username == null) return blogService.getBlogsByCategory(category);
         return blogService.getBlogsByAuthor(username);
+    }
+
+    @GetMapping("/blog/{id}")
+    public ResponseEntity<ResponseDTO<BlogDTO>> getBlogById(@PathVariable Long id) {
+        return blogService.getBlogById(id);
     }
 
     @PostMapping("/blog")

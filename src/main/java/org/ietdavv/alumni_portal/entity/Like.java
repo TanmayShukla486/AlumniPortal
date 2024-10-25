@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @Builder
 public class Like {
-
+//TODO LIKE CONDITION NOT MATCHED
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")

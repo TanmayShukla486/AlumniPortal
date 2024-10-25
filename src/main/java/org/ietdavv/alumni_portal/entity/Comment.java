@@ -36,8 +36,6 @@ public class Comment {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false, columnDefinition = "timestamptz default now()")
     private Timestamp updatedAt;
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Reply> replies;
     @OneToMany(mappedBy = "entityId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Like> likes;
 

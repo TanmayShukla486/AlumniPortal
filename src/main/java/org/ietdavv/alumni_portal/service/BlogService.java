@@ -1,17 +1,16 @@
 package org.ietdavv.alumni_portal.service;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.ietdavv.alumni_portal.dto.BlogDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
-import org.ietdavv.alumni_portal.entity.Blog;
-import org.ietdavv.alumni_portal.entity.Category;
-import org.ietdavv.alumni_portal.entity.PortalUser;
-import org.ietdavv.alumni_portal.entity.Role;
+import org.ietdavv.alumni_portal.entity.*;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
 import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
 import org.ietdavv.alumni_portal.repository.BlogRepository;
 import org.ietdavv.alumni_portal.repository.CategoryRepository;
+import org.ietdavv.alumni_portal.repository.LikeRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.BlogServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +21,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BlogService implements BlogServiceInterface {
 
     private final BlogRepository blogRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final LikeRepository likeRepository;
 
-    @Autowired
-    public BlogService(BlogRepository blogRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
-        this.blogRepository = blogRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-    }
+
 
     @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs() {
@@ -91,6 +87,22 @@ public class BlogService implements BlogServiceInterface {
     }
 
     @Override
+    public ResponseEntity<ResponseDTO<BlogDTO>> getBlogById(Long id) {
+        return ResponseEntity.ok(
+                ResponseDTO.<BlogDTO>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(
+                                BlogDTO.mapToDTO(
+                                        blogRepository.findById(id)
+                                                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                                )
+                        )
+                        .build()
+        );
+    }
+
+    @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthor(String username) {
 
         final PortalUser user = userRepository
@@ -124,6 +136,7 @@ public class BlogService implements BlogServiceInterface {
                 .findByCategory(dto.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
         System.out.println(category.toString());
+
         Blog blog = Blog.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
@@ -132,8 +145,13 @@ public class BlogService implements BlogServiceInterface {
                 .commentsEnabled(dto.isCommentsEnabled())
                 .build();
 
-        blogRepository.save(blog);
-
+        Blog saved = blogRepository.save(blog);
+        final Like like = Like.builder()
+                .likedBy(user)
+                .type(LikeEntity.BLOG)
+                .entityId(saved.getId())
+                .build();
+        likeRepository.save(like);
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(200)
