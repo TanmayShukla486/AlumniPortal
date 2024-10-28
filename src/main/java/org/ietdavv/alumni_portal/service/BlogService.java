@@ -2,6 +2,7 @@ package org.ietdavv.alumni_portal.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.ietdavv.alumni_portal.dto.BlogDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.*;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -82,6 +84,38 @@ public class BlogService implements BlogServiceInterface {
                         .statusCode(200)
                         .data(blogs)
                         .message(ResponseMessage.SUCCESS)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLatestBlogs() {
+        return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(
+                                blogRepository
+                                        .findAllByOrderByCreatedAtDesc()
+                                        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                                        .stream()
+                                        .map(BlogDTO::mapToDTO)
+                                        .toList()
+                        )
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLowestLikedBlogs() {
+        return ResponseEntity.ok(
+                ResponseDTO.<List<BlogDTO>>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(blogRepository
+                                .findAllOrderByLikesAsc()
+                                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                                .stream()
+                                .map(BlogDTO::mapToDTO)
+                                .toList())
                         .build()
         );
     }

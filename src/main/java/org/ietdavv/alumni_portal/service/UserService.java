@@ -3,6 +3,7 @@ package org.ietdavv.alumni_portal.service;
 import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.*;
 import org.ietdavv.alumni_portal.entity.*;
+import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.RoleNotFoundException;
 import org.ietdavv.alumni_portal.repository.AlumniDetailsRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
@@ -99,6 +100,55 @@ public class UserService implements UserServiceInterface {
                     .build()
             );
         }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAlumniOfYear(Integer year) {
+        Role role = Role.ROLE_ALUMNI;
+        return ResponseEntity.ok(
+                ResponseDTO.<List<UserDTO>>builder()
+                        .statusCode(200)
+                        .message("Successful")
+                        .data(repository.findByRoleAndGraduationYear(role, year)
+                                .stream()
+                                .map(UserDTO::mapToDTO)
+                                .toList())
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<UserDTO>>> getUserByRole(String r) {
+        Role role = switch (r) {
+            case "STUDENT" -> Role.ROLE_STUDENT;
+            case "ALUMNI" -> Role.ROLE_ALUMNI;
+            default -> throw new RoleNotFoundException("Invalid role assigned");
+        };
+        return ResponseEntity.ok(ResponseDTO.<List<UserDTO>>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(
+                                repository.findByRole(role)
+                                        .stream()
+                                        .map(UserDTO::mapToDTO)
+                                        .toList()
+                        )
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<UserDTO>>> getAllUsers() {
+        return ResponseEntity.ok(ResponseDTO.<List<UserDTO>>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(
+                                repository.findAll()
+                                        .stream().map(UserDTO::mapToDTO)
+                                        .toList()
+                        )
+                .build());
+    }
+
+
 
         @Override
         public ResponseEntity<ResponseDTO<LoginResponseDTO>> loginUser(LoginUserDTO user) {

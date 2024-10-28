@@ -24,8 +24,8 @@ public class BlogController {
 
     @GetMapping("/blog")
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs(
-            @PathVariable(name = "author", required = false) String username,
-            @PathVariable(name = "category", required = false) String category
+            @RequestParam(name = "author", required = false) String username,
+            @RequestParam(name = "category", required = false) String category
     ) {
         if (username == null && category == null) return blogService.getAllBlogs();
         else if (username != null && category != null)
@@ -37,6 +37,11 @@ public class BlogController {
     @GetMapping("/blog/{id}")
     public ResponseEntity<ResponseDTO<BlogDTO>> getBlogById(@PathVariable Long id) {
         return blogService.getBlogById(id);
+    }
+
+    @GetMapping("/blog/latest")
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLatestBlogs() {
+        return blogService.getLatestBlogs();
     }
 
     @PostMapping("/blog")

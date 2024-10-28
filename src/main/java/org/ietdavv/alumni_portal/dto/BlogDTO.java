@@ -3,6 +3,7 @@ package org.ietdavv.alumni_portal.dto;
 import lombok.*;
 import org.ietdavv.alumni_portal.entity.Blog;
 
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class BlogDTO {
     private String content;
     private int likes;
     private boolean commentsEnabled;
+    private Date createdAt;
 
     public static BlogDTO mapToDTO(Blog blog) {
         return BlogDTO.builder()
@@ -32,6 +34,7 @@ public class BlogDTO {
                 .content(blog.getContent())
                 .commentsEnabled(blog.isCommentsEnabled())
                 .likes(blog.getLikes().size())
+                .createdAt(blog.getCreatedAt())
                 .build();
     }
 

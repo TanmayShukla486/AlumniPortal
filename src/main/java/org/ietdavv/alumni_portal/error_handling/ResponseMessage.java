@@ -20,4 +20,5 @@ public class ResponseMessage {
     public static final String BLOG_DELETED="Blog deleted successfully";
     public static final String INVALID_ENTITY="Invalid Entity input";
     public static final String CHATROOM_NOT_FOUND="No chatroom found";
+    public static final String ACCESS_DENIED = "Access Denied";
 }
