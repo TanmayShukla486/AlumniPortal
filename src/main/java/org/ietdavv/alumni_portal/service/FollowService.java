@@ -11,9 +11,13 @@ import org.ietdavv.alumni_portal.repository.FollowRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.FollowServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -35,7 +39,9 @@ public class FollowService implements FollowServiceInterface {
         PortalUser user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
-        List<FollowDTO> data = followRepository.findByFollowing(user)
+        Pageable sortedByMostRecent = PageRequest
+                .of(0, 10, Sort.by("createdAt"));
+        List<FollowDTO> data = followRepository.findByFollowing(user, sortedByMostRecent)
                 .stream()
                 .map(FollowDTO::mapToDTO)
                 .toList();

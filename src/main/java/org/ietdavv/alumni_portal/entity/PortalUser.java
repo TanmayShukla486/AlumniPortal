@@ -40,6 +40,9 @@ public class PortalUser {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "department")
+    private Department department;
     @Column(name = "graduation_year")
     private int graduationYear;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

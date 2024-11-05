@@ -15,4 +15,8 @@ public interface UserRepository extends JpaRepository<PortalUser, Long> {
 
     List<PortalUser> findByRoleAndGraduationYear(Role role, Integer year);
 
+    Long countByRole(Role role);
+
+    List<PortalUser> findByGraduationYear(Integer year);
+
 }

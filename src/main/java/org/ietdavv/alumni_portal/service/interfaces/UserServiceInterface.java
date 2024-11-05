@@ -1,6 +1,7 @@
 package org.ietdavv.alumni_portal.service.interfaces;
 
 import org.ietdavv.alumni_portal.dto.*;
+import org.ietdavv.alumni_portal.entity.Role;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -15,4 +16,8 @@ public interface UserServiceInterface {
     ResponseEntity<ResponseDTO<List<UserDTO>>> getAllUsers();
 
     ResponseEntity<ResponseDTO<List<UserDTO>>> getAlumniOfYear(Integer year);
+
+    ResponseEntity<ResponseDTO<Long>> countByRole(String role);
+
+    ResponseEntity<ResponseDTO<List<RecommendedUserDTO>>> getRecommendedAlumni();
 }

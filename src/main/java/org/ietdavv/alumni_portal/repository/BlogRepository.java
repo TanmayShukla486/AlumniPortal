@@ -19,6 +19,17 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     Optional<List<Blog>> findAllByOrderByCreatedAtDesc();
 
-    @Query("SELECT b FROM Blog b LEFT JOIN b.likes l GROUP BY b ORDER BY COUNT(l) ASC")
-    Optional<List<Blog>> findAllOrderByLikesAsc();
+    @Query("SELECT b FROM Blog b LEFT JOIN b.likes l GROUP BY b ORDER BY COUNT(l) DESC")
+    Optional<List<Blog>> findAllOrderByLikesDesc();
+
+    Long countByCategory(Category category);
+
+    Long countByAuthor(PortalUser user);
+
+
+    List<Blog> findByTitleContaining(String titlePattern);
+
+    List<Blog> findByCategoryAndTitleContaining(Category category, String title);
+    List<Blog> findByAuthorAndTitleContaining(PortalUser author, String title);
+    List<Blog> findByAuthorAndCategoryAndTitleContaining(PortalUser author, Category category, String title);
 }

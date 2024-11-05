@@ -17,10 +17,20 @@ public interface BlogServiceInterface {
 
     ResponseEntity<ResponseDTO<List<BlogDTO>>> getLatestBlogs();
 
-    ResponseEntity<ResponseDTO<List<BlogDTO>>> getLowestLikedBlogs(); // for testing purposes
 
     ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthor(String username);
     ResponseEntity<ResponseDTO<String>> postBlog(BlogDTO blog);
     ResponseEntity<ResponseDTO<String>> deleteBlog(Long blogId);
 
+    ResponseEntity<ResponseDTO<Long>> getBlogCountByCategory(String category);
+    ResponseEntity<ResponseDTO<Long>> getBlogCountByAuthor(String author);
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogByTitle(String title);
+
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogByTitleAndCategory(String category, String title);
+
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndTitle(String username, String title);
+
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndTitleAndCategory(String username, String title, String category);
+
+    ResponseEntity<ResponseDTO<List<BlogDTO>>> getPopularBlogs();
 }

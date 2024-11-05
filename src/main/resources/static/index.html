@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>WebSocket Chat Test</title>
+    <link
+      rel="stylesheet"
+      href="styles.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>WebSocket Chat</h1>
+      <div
+        id="messages"
+        class="messages"
+      ></div>
+      <input
+        type="text"
+        id="recipient"
+        placeholder="Recipient Username"
+        required
+      />
+      <input
+        type="text"
+        id="message"
+        placeholder="Type your message"
+        required
+      />
+      <button id="sendBtn">Send</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

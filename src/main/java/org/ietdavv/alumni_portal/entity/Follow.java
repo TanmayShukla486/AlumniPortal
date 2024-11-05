@@ -2,6 +2,9 @@ package org.ietdavv.alumni_portal.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "follow_tbl")
@@ -22,6 +25,7 @@ public class Follow {
     @ManyToOne
     @JoinColumn(name = "following_id")
     private PortalUser following;
-
+    @CreationTimestamp
+    private Timestamp createdAt;
 
 }

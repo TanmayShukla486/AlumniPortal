@@ -2,7 +2,6 @@ package org.ietdavv.alumni_portal.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.ietdavv.alumni_portal.dto.BlogDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.*;
@@ -14,13 +13,11 @@ import org.ietdavv.alumni_portal.repository.CategoryRepository;
 import org.ietdavv.alumni_portal.repository.LikeRepository;
 import org.ietdavv.alumni_portal.repository.UserRepository;
 import org.ietdavv.alumni_portal.service.interfaces.BlogServiceInterface;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -104,21 +101,7 @@ public class BlogService implements BlogServiceInterface {
                 .build());
     }
 
-    @Override
-    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLowestLikedBlogs() {
-        return ResponseEntity.ok(
-                ResponseDTO.<List<BlogDTO>>builder()
-                        .statusCode(200)
-                        .message(ResponseMessage.SUCCESS)
-                        .data(blogRepository
-                                .findAllOrderByLikesAsc()
-                                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
-                                .stream()
-                                .map(BlogDTO::mapToDTO)
-                                .toList())
-                        .build()
-        );
-    }
+
 
     @Override
     public ResponseEntity<ResponseDTO<BlogDTO>> getBlogById(Long id) {
@@ -169,7 +152,6 @@ public class BlogService implements BlogServiceInterface {
         final Category category = categoryRepository
                 .findByCategory(dto.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
-        System.out.println(category.toString());
 
         Blog blog = Blog.builder()
                 .title(dto.getTitle())
@@ -216,6 +198,118 @@ public class BlogService implements BlogServiceInterface {
                         .statusCode(204)
                         .message(ResponseMessage.SUCCESS)
                         .data(ResponseMessage.BLOG_DELETED)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<Long>> getBlogCountByCategory(String cat) {
+        Category category = categoryRepository.findByCategory(cat)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
+        return ResponseEntity.ok(
+                ResponseDTO.<Long>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(blogRepository.countByCategory(category))
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<Long>> getBlogCountByAuthor(String author) {
+        PortalUser user = userRepository.findByUsername(author)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        return ResponseEntity.ok(
+                ResponseDTO.<Long>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(blogRepository.countByAuthor(user))
+                        .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogByTitle(String title) {
+        return ResponseEntity.ok(
+                ResponseDTO
+                        .<List<BlogDTO>>builder()
+                        .statusCode(200)
+                        .message(ResponseMessage.SUCCESS)
+                        .data(blogRepository.findByTitleContaining(title)
+                                .stream()
+                                .map(BlogDTO::mapToDTO)
+                                .toList())
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogByTitleAndCategory(String cat, String title) {
+
+        Category category = categoryRepository.findByCategory(cat)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
+
+        return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
+                        .statusCode(200).message(ResponseMessage.SUCCESS)
+                        .data(blogRepository
+                                .findByCategoryAndTitleContaining(category, title)
+                                .stream()
+                                .map(BlogDTO::mapToDTO)
+                                .toList()
+                        )
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndTitle(String username, String title) {
+        PortalUser author = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.SUCCESS));
+        return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
+                .statusCode(200).message(ResponseMessage.SUCCESS)
+                        .data(blogRepository
+                                .findByAuthorAndTitleContaining(author, title)
+                                .stream()
+                                .map(BlogDTO::mapToDTO)
+                                .toList()
+                        )
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getBlogsByAuthorAndTitleAndCategory(
+            String username,
+            String title,
+            String cat) {
+
+        Category category = categoryRepository.findByCategory(cat)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
+
+        PortalUser author = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.SUCCESS));
+        return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
+                .statusCode(200).message(ResponseMessage.SUCCESS)
+                .data(blogRepository
+                        .findByAuthorAndCategoryAndTitleContaining(author, category, title)
+                        .stream()
+                        .map(BlogDTO::mapToDTO)
+                        .toList()
+                )
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getPopularBlogs() {
+        return ResponseEntity.ok(
+                ResponseDTO
+                        .<List<BlogDTO>>builder()
+                        .statusCode(200).message(ResponseMessage.SUCCESS)
+                        .data(blogRepository
+                                .findAllOrderByLikesDesc()
+                                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                                .stream()
+                                .map(BlogDTO::mapToDTO)
+                                .toList())
                         .build()
         );
     }

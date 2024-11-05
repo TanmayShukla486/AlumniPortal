@@ -25,13 +25,17 @@ public class BlogController {
     @GetMapping("/blog")
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs(
             @RequestParam(name = "author", required = false) String username,
-            @RequestParam(name = "category", required = false) String category
+            @RequestParam(name = "category", required = false) String category,
+            @RequestParam(name = "title", required = false) String title
     ) {
-        if (username == null && category == null) return blogService.getAllBlogs();
-        else if (username != null && category != null)
-            return blogService.getBlogsByAuthorAndCategory(username, category);
-        else if (username == null) return blogService.getBlogsByCategory(category);
-        return blogService.getBlogsByAuthor(username);
+        if (username == null && category == null && title == null) return blogService.getAllBlogs();
+        else if (category == null && username == null) return blogService.getBlogByTitle(title);
+        else if (username == null && title == null) return blogService.getBlogsByCategory(category);
+        else if (category == null && title == null) return blogService.getBlogsByAuthor(username);
+        else if (username == null) return blogService.getBlogByTitleAndCategory(category, title);
+        else if (category == null) return blogService.getBlogsByAuthorAndTitle(username, title);
+        else if (title == null) return blogService.getBlogsByAuthorAndCategory(username, category);
+        return blogService.getBlogsByAuthorAndTitleAndCategory(username, title, category);
     }
 
     @GetMapping("/blog/{id}")
@@ -39,9 +43,24 @@ public class BlogController {
         return blogService.getBlogById(id);
     }
 
+    @GetMapping("/blog/category/{category}/count")
+    public ResponseEntity<ResponseDTO<Long>> getBlogCountByCategory(@PathVariable String category) {
+        return blogService.getBlogCountByCategory(category);
+    }
+
+    @GetMapping("/blog/author/{author}/count")
+    public ResponseEntity<ResponseDTO<Long>> getBlogCountByAuthor(@PathVariable String author) {
+        return blogService.getBlogCountByAuthor(author);
+    }
+
     @GetMapping("/blog/latest")
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLatestBlogs() {
         return blogService.getLatestBlogs();
+    }
+
+    @GetMapping("/blog/popular")
+    public ResponseEntity<ResponseDTO<List<BlogDTO>>> getPopularBlogs() {
+        return blogService.getPopularBlogs();
     }
 
     @PostMapping("/blog")
@@ -50,7 +69,8 @@ public class BlogController {
         return blogService.postBlog(blog);
     }
 
-    @DeleteMapping("/blog")
+
+    @DeleteMapping("/blog/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ALUMNI', 'ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO<String>> deleteBlog(@PathVariable(name = "id") Long blogId) {
         return blogService.deleteBlog(blogId);

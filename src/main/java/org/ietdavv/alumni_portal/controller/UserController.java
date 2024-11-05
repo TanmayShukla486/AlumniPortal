@@ -57,4 +57,9 @@ public class UserController {
         if (year == null) return userService.getUserByRole(Role.ROLE_ALUMNI.name().substring(5));
         return userService.getAlumniOfYear(year);
     }
+
+    @GetMapping("/user/recommended")
+    public ResponseEntity<ResponseDTO<List<RecommendedUserDTO>>> getRecommended() {
+        return userService.getRecommendedAlumni();
+    }
 }
