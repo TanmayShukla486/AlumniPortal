@@ -6,28 +6,25 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "notice_tbl")
 @Getter
 @Setter
-@Builder
 @ToString
-@Entity
-@Table(name = "event_tbl")
-public class Event {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class Notice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "event_title")
-    private String eventTitle;
-    @Column(name = "event_content")
-    private String eventContent;
-    @Column(name = "event_date")
-    private Date date;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "notice_content")
+    private String content;
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "timestamptz default now()")
     private Timestamp createdAt;

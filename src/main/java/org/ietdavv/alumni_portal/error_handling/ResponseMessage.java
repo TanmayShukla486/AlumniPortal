@@ -22,4 +22,5 @@ public class ResponseMessage {
     public static final String CHATROOM_NOT_FOUND="No chatroom found";
     public static final String ACCESS_DENIED = "Access Denied";
     public static final String EVENT_NOT_FOUND = "Event Not found";
+    public static final String NOTICE_NOT_FOUND = "Notice Not found";
 }
