@@ -21,4 +21,5 @@ public class ResponseMessage {
     public static final String INVALID_ENTITY="Invalid Entity input";
     public static final String CHATROOM_NOT_FOUND="No chatroom found";
     public static final String ACCESS_DENIED = "Access Denied";
+    public static final String EVENT_NOT_FOUND = "Event Not found";
 }
