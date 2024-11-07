@@ -4,7 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "like_tbl")
+@Table(name = "like_tbl",
+        uniqueConstraints = {
+        @UniqueConstraint(name = "unique_user_entity_constraint",
+                columnNames = {"liked_by_id", "entity_type", "entity_id"})
+})
 @Getter
 @Setter
 @AllArgsConstructor

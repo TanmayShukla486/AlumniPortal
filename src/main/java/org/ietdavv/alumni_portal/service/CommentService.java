@@ -6,6 +6,7 @@ import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Blog;
 import org.ietdavv.alumni_portal.entity.Comment;
 import org.ietdavv.alumni_portal.entity.PortalUser;
+import org.ietdavv.alumni_portal.entity.Role;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
 import org.ietdavv.alumni_portal.error_handling.errors.UnAuthorizedCommandException;
@@ -88,7 +89,7 @@ public class CommentService implements CommentServiceInterface {
                         SecurityContextHolder.getContext().getAuthentication().getName()
                 )
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
-        if (comment.getCommenter().equals(user))
+        if (comment.getCommenter().equals(user) || user.getRole().equals(Role.ROLE_ALUMNI))
             commentRepository.delete(comment);
         else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(
