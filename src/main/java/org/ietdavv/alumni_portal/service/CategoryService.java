@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.CategoryDTO;
 import org.ietdavv.alumni_portal.dto.ResponseDTO;
 import org.ietdavv.alumni_portal.entity.Category;
@@ -43,6 +44,7 @@ public class CategoryService implements CategoryServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(CategoryDTO category) {
         Category toBeSaved = Category.builder()
                 .category(category.getTitle())

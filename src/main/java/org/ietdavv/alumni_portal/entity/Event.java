@@ -27,7 +27,7 @@ public class Event {
     @Column(name = "event_content")
     private String eventContent;
     @Column(name = "event_date")
-    private Date date;
+    private String date;
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "timestamptz default now()")
     private Timestamp createdAt;

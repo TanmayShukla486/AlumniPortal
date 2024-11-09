@@ -55,6 +55,8 @@ public class PortalUser {
     private Set<Follow> followers;
     @OneToMany(mappedBy = "author") // only possible if you are an author
     private List<Blog> blogs;
+    @OneToMany(mappedBy = "alumni", cascade = CascadeType.ALL)
+    private List<JobPosting> jobPostings;
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, columnDefinition = "timestamptz default now()")
     private Timestamp createdAt;

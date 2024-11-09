@@ -42,7 +42,9 @@ public class UserService implements UserServiceInterface {
                 .stream()
                 .map(user -> user.getFollower().getUsername())
                 .collect(Collectors.toSet());
-        for (PortalUser user: all) if (!usernames.contains(user.getUsername())) users.add(user);
+        for (PortalUser user: all)
+            if (!usernames.contains(user.getUsername()) && !user.getRole().equals(Role.ROLE_ADMIN))
+                users.add(user);
         return users;
     }
 
@@ -161,6 +163,15 @@ public class UserService implements UserServiceInterface {
                         )
                 .build()
         );
+    }
+
+    @Override
+    public ResponseEntity<List<CompactAlumniDTO>> getAlumni() {
+        List<CompactAlumniDTO> alumni = new ArrayList<>(repository.findByRole(Role.ROLE_ALUMNI).stream()
+                .map(CompactAlumniDTO::mapToDTO)
+                .toList());
+        Collections.sort(alumni);
+        return ResponseEntity.ok(alumni);
     }
 
     @Override

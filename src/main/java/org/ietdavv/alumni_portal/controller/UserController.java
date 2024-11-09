@@ -51,15 +51,19 @@ public class UserController {
         return userService.getUserByRole(role);
     }
 
-    @GetMapping("/user/alumni")
+    @GetMapping("/user/alumni/{year}")
     public ResponseEntity<ResponseDTO<List<UserDTO>>> getAlumni(
-            @RequestParam(name = "graduation", required = false) Integer year) {
-        if (year == null) return userService.getUserByRole(Role.ROLE_ALUMNI.name().substring(5));
+            @PathVariable(name = "year") Integer year) {
         return userService.getAlumniOfYear(year);
     }
 
     @GetMapping("/user/recommended")
     public ResponseEntity<ResponseDTO<List<RecommendedUserDTO>>> getRecommended() {
         return userService.getRecommendedAlumni();
+    }
+
+    @GetMapping("/alumni")
+    public ResponseEntity<List<CompactAlumniDTO>> getAlumni() {
+        return userService.getAlumni();
     }
 }

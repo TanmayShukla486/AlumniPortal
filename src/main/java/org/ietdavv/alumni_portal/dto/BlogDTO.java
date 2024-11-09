@@ -22,6 +22,7 @@ public class BlogDTO {
     private String content;
     private int likes;
     private boolean commentsEnabled;
+    private int commentCount;
     private Date createdAt;
 
     public static BlogDTO mapToDTO(Blog blog) {
@@ -35,6 +36,7 @@ public class BlogDTO {
                 .commentsEnabled(blog.isCommentsEnabled())
                 .likes(blog.getLikes().size())
                 .createdAt(blog.getCreatedAt())
+                .commentCount(blog.getComments() != null ? blog.getComments().size() : 0)
                 .build();
     }
 

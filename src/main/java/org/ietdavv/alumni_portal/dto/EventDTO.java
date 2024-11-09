@@ -16,7 +16,7 @@ public class EventDTO {
     private Long id;
     private String title;
     private String content;
-    private Date date;
+    private String date;
 
     public static EventDTO mapToDTO(Event event) {
         return EventDTO.builder()

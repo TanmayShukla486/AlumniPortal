@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.ietdavv.alumni_portal.dto.NoticeDTO;
 import org.ietdavv.alumni_portal.entity.Notice;
@@ -27,6 +28,7 @@ public class NoticeService implements NoticeServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> addNotice(NoticeDTO dto) {
         Notice notice = Notice.builder()
                 .title(dto.getTitle())
@@ -37,6 +39,7 @@ public class NoticeService implements NoticeServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> removeNotice(Long id) {
         Notice notice = noticeRepository
                 .findById(id)

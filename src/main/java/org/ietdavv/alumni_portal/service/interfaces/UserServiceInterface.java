@@ -11,6 +11,9 @@ public interface UserServiceInterface {
     ResponseEntity<ResponseDTO<CompactUserDTO>> registerUser(RegisterUserDTO user);
     ResponseEntity<ResponseDTO<UserDTO>> getUserDetailsByUsername(String username);
     ResponseEntity<ResponseDTO<LoginResponseDTO>> loginUser(LoginUserDTO user);
+
+    ResponseEntity<List<CompactAlumniDTO>> getAlumni();
+
     ResponseEntity<ResponseDTO<List<UserDTO>>> getUserByRole(String role);
 
     ResponseEntity<ResponseDTO<List<UserDTO>>> getAllUsers();

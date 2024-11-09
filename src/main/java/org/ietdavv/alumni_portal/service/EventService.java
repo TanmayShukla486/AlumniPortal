@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.ietdavv.alumni_portal.dto.EventDTO;
 import org.ietdavv.alumni_portal.entity.Event;
@@ -24,6 +25,7 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> createEvent(EventDTO dto) {
         Event event = Event.builder()
                 .eventTitle(dto.getTitle())
@@ -35,6 +37,7 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> deleteEvent(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.EVENT_NOT_FOUND));
