@@ -23,4 +23,6 @@ public interface UserServiceInterface {
     ResponseEntity<ResponseDTO<Long>> countByRole(String role);
 
     ResponseEntity<ResponseDTO<List<RecommendedUserDTO>>> getRecommendedAlumni();
+
+    ResponseEntity<List<String>> getUsersByUsername(String username);
 }

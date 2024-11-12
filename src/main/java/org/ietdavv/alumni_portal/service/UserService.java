@@ -228,4 +228,13 @@ public class UserService implements UserServiceInterface {
                 .build()
         );
     }
+
+    @Override
+    public ResponseEntity<List<String>> getUsersByUsername(String username) {
+        if (username == null) throw new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND);
+        return ResponseEntity.ok(repository.findByUsernameContaining(username)
+                .stream()
+                .map(PortalUser::getUsername)
+                .toList());
+    }
 }

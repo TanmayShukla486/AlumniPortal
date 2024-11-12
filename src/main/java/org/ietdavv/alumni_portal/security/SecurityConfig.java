@@ -68,7 +68,7 @@ public class SecurityConfig {
                         req
                                 .requestMatchers("/api/login").permitAll()
                                 .requestMatchers("/api/register").permitAll()
-                                .requestMatchers("/ws/**").permitAll()
+                                .requestMatchers("/chat**").permitAll()
                                 .requestMatchers("/styles.css", "/script.js", "/index.html").permitAll()
                                 .anyRequest().authenticated()
                 )
