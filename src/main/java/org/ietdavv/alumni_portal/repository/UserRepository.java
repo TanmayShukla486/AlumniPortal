@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<PortalUser, Long> {
 
     List<PortalUser> findByGraduationYear(Integer year);
 
+    List<PortalUser> findByUsernameContaining(String regex);
 }
