@@ -36,7 +36,7 @@ public class Blog {
     private boolean commentsEnabled;
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Comment> comments;
-    @OneToMany(mappedBy = "entityId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Like> likes;
     @CreationTimestamp
     @Column(name = "created_at")

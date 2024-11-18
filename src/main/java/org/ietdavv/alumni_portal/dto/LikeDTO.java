@@ -14,21 +14,11 @@ public class LikeDTO {
 
     private Long id;
     private String username;
-    private String entityType;
-    private Long entityId;
-
-    public static LikeEntity getEntity(String type) {
-        if (type.equalsIgnoreCase("BLOG")) return LikeEntity.BLOG;
-        else if (type.equalsIgnoreCase("COMMENT")) return LikeEntity.COMMENT;
-        return LikeEntity.REPLY;
-    }
 
     public static LikeDTO mapToDTO(Like like) {
         return LikeDTO.builder()
                 .id(like.getId())
                 .username(like.getLikedBy().getUsername())
-                .entityId(like.getEntityId())
-                .entityType(like.getType().name())
                 .build();
     }
 }

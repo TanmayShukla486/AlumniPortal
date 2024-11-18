@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "like_tbl",
+@Table(name = "like_tbl2",
         uniqueConstraints = {
-        @UniqueConstraint(name = "unique_user_entity_constraint",
-                columnNames = {"liked_by_id", "entity_type", "entity_id"})
-})
+                @UniqueConstraint(name = "unique_user_blog_constraint",
+                        columnNames = {"liked_by_id", "blog_id"}),
+                @UniqueConstraint(name = "unique_user_comment_constraint",
+                        columnNames = {"liked_by_id", "comment_id"})
+        })
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,10 +26,10 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "liked_by_id")
     private PortalUser likedBy;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "entity_type")
-    private LikeEntity type;
-    @Column(name = "entity_id")
-    private Long entityId;
-
+    @ManyToOne
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 }

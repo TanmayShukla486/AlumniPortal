@@ -30,22 +30,21 @@ public class BlogService implements BlogServiceInterface {
     private final CategoryRepository categoryRepository;
     private final LikeRepository likeRepository;
 
-    private void mapLikedBy(List<BlogDTO> blogs) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        PortalUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
-        List<Like> list = likeRepository.findByTypeAndLikedBy(LikeEntity.BLOG, user);
-        Set<Long> ids = new HashSet<>();
-        for (Like like: list) ids.add(like.getEntityId());
-        for (BlogDTO blog: blogs) {
-            if (ids.contains(blog.getId())) blog.setAlreadyLiked(true);
-        }
-    }
+//    private void mapLikedBy(List<BlogDTO> blogs) {
+//        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+//        PortalUser user = userRepository.findByUsername(username)
+//                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+//        List<Like> list = likeRepository.findByTypeAndLikedBy(LikeEntity.BLOG, user);
+//        Set<Long> ids = new HashSet<>();
+//        for (Like like: list) ids.add(like.getEntityId());
+//        for (BlogDTO blog: blogs) {
+//            if (ids.contains(blog.getId())) blog.setAlreadyLiked(true);
+//        }
+//    }
 
     @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs() {
         List<BlogDTO> blogs = blogRepository.findAll().stream().map(BlogDTO::mapToDTO).toList();
-        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -66,7 +65,6 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
-        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -90,7 +88,6 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
-        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -108,7 +105,6 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
-        mapLikedBy(blogs);
         return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
                         .message(ResponseMessage.SUCCESS)
@@ -146,7 +142,6 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
-        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -177,13 +172,7 @@ public class BlogService implements BlogServiceInterface {
                 .commentsEnabled(dto.isCommentsEnabled())
                 .build();
 
-        Blog saved = blogRepository.save(blog);
-        final Like like = Like.builder()
-                .likedBy(user)
-                .type(LikeEntity.BLOG)
-                .entityId(saved.getId())
-                .build();
-        likeRepository.save(like);
+        blogRepository.save(blog);
         return ResponseEntity.ok(
                 ResponseDTO.<String>builder()
                         .statusCode(200)
@@ -206,7 +195,7 @@ public class BlogService implements BlogServiceInterface {
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
         if (blog.getAuthor().equals(user))
             blogRepository.delete(blog);
-        else if (user.getRole().equals(Role.ROLE_ALUMNI))
+        else if (user.getRole().equals(Role.ROLE_ADMIN))
             blogRepository.delete(blog);
         else throw new UnAuthorizedCommandException(ResponseMessage.UNAUTHORIZED);
         return ResponseEntity.ok(

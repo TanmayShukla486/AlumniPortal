@@ -13,7 +13,7 @@ public interface LikeServiceInterface {
     ResponseEntity<LikeDTO> addLike(LikeDTO dto);
 
     @Transactional
-    ResponseEntity<Long> removeLike(Long id);
+    ResponseEntity<Long> removeLike(Long id, LikeEntity type);
 
 
     ResponseEntity<List<LikeDTO>> getLikes(LikeEntity type, Long eId);

@@ -10,9 +10,5 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    Long countByEntityId(Long entityId);
-    Optional<Like> findByEntityIdAndLikedBy(Long entityId, PortalUser likedBy);
-    List<Like> findByTypeAndLikedBy(LikeEntity type, PortalUser portalUser);
-    Optional<Like> findByEntityTypeAndEntityIdAndLikedBy(LikeEntity type, Long id, PortalUser user);
-    List<Like> findByEntityTypeAndEntityId(LikeEntity type, Long id);
+
 }
