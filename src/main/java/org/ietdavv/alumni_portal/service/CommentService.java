@@ -123,4 +123,16 @@ public class CommentService implements CommentServiceInterface {
                         .build()
         );
     }
+
+    @Override
+    public ResponseEntity<List<CommentDTO>> getCommentsByUser(String username) {
+        PortalUser user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        return ResponseEntity.ok(
+                commentRepository.findByCommenter(user)
+                        .stream().map(CommentDTO::mapToDTO)
+                        .toList()
+        );
+    }
 }

@@ -46,6 +46,7 @@ public class CategoryService implements CategoryServiceInterface {
     @Override
     @Transactional
     public ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(CategoryDTO category) {
+        System.out.println(category.toString());
         Category toBeSaved = Category.builder()
                 .category(category.getTitle())
                 .color(category.getColor())
@@ -61,17 +62,13 @@ public class CategoryService implements CategoryServiceInterface {
     }
 
     @Override
-    public ResponseEntity<ResponseDTO<String>> removeCategory(String category) {
+    public ResponseEntity<String> removeCategory(String category) {
         Category category1 = categoryRepository
                 .findByCategory(category)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.CATEGORY_NOT_FOUND));
         categoryRepository.delete(category1);
         return ResponseEntity.ok(
-                ResponseDTO.<String>builder()
-                        .statusCode(204)
-                        .message(ResponseMessage.SUCCESS)
-                        .data(ResponseMessage.CATEGORY_DELETED)
-                        .build()
+                category1.getCategory()
         );
     }
 

@@ -10,8 +10,8 @@ public interface FollowServiceInterface {
 
     ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowers(String userId);
     ResponseEntity<ResponseDTO<List<FollowDTO>>> getFollowing(String userId);
-    ResponseEntity<ResponseDTO<String>> followUser(String toBeFollowed);
-    ResponseEntity<ResponseDTO<String>> unFollowUser(String unfollowId);
+    ResponseEntity<FollowDTO> followUser(String toBeFollowed);
+    ResponseEntity<Long> unFollowUser(String unfollowId);
     ResponseEntity<ResponseDTO<Long>> getFollowerCount(String userId);
     ResponseEntity<ResponseDTO<Long>> getFollowingCount(String userId);
 

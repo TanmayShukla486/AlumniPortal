@@ -25,4 +25,11 @@ public interface UserServiceInterface {
     ResponseEntity<ResponseDTO<List<RecommendedUserDTO>>> getRecommendedAlumni();
 
     ResponseEntity<List<String>> getUsersByUsername(String username);
+
+    ResponseEntity<?> getAlumniByNameAndYear(String name, Integer year);
+
+
+    ResponseEntity<List<CompactAlumniDTO>> getAlumniByYear(Integer year);
+
+    ResponseEntity<?> getAlumniByName(String name);
 }

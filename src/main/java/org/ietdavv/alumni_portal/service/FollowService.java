@@ -74,7 +74,7 @@ public class FollowService implements FollowServiceInterface {
 
     @Override
     @Transactional
-    public ResponseEntity<ResponseDTO<String>> followUser(String toBeFollowed) {
+    public ResponseEntity<FollowDTO> followUser(String toBeFollowed) {
         PortalUser following = userRepository
                 .findByUsername(toBeFollowed)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
@@ -86,18 +86,14 @@ public class FollowService implements FollowServiceInterface {
                 .following(following)
                 .follower(follower)
                 .build();
-        followRepository.save(follow);
-        return ResponseEntity.ok(
-                ResponseDTO.<String>builder()
-                        .statusCode(200)
-                        .message(ResponseMessage.SUCCESS)
-                        .data("Successfully following " + toBeFollowed)
-                        .build());
+        Follow saved = followRepository.save(follow);
+        return ResponseEntity.ok(FollowDTO.mapToDTO(saved));
+
     }
 
     @Override
     @Transactional
-    public ResponseEntity<ResponseDTO<String>> unFollowUser(String f2) {
+    public ResponseEntity<Long> unFollowUser(String f2) {
         String f1 = SecurityContextHolder.getContext().getAuthentication().getName();
         PortalUser follower = userRepository
                 .findByUsername(f1)
@@ -109,12 +105,7 @@ public class FollowService implements FollowServiceInterface {
                 .findByFollowerAndFollowing(follower, following)
                 .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.FOLLOW_NOT_FOUND));
         followRepository.delete(follow);
-        return ResponseEntity.ok(ResponseDTO.<String>builder()
-                .statusCode(204)
-                .message(ResponseMessage.SUCCESS)
-                .data("Successfully unfollowed " + f2)
-                .build()
-        );
+        return ResponseEntity.ok(follow.getId());
     }
 
     @Override

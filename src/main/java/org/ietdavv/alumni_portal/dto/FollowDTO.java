@@ -13,11 +13,13 @@ import org.ietdavv.alumni_portal.entity.Follow;
 @Builder
 public class FollowDTO {
 
+    private Long id;
     private String followedBy;
     private String followed;
 
     public static FollowDTO mapToDTO(Follow follow) {
         return FollowDTO.builder()
+                .id(follow.getId())
                 .followedBy(follow.getFollower().getUsername())
                 .followed(follow.getFollowing().getUsername())
                 .build();

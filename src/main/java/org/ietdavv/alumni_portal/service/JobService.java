@@ -2,6 +2,7 @@ package org.ietdavv.alumni_portal.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.ietdavv.alumni_portal.dto.JobPostingDTO;
 import org.ietdavv.alumni_portal.entity.JobPosting;
 import org.ietdavv.alumni_portal.entity.PortalUser;
@@ -119,6 +120,18 @@ public class JobService implements JobServiceInterface {
         return ResponseEntity.ok(ResponseMessage.SUCCESS);
     }
 
+    @Override
+    public ResponseEntity<JobPostingDTO> getJobPostingById(Long id) {
+        JobPosting posting = jobRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.POSTING_NOT_FOUND));
+        return ResponseEntity.ok(JobPostingDTO.mapToDTO(posting));
+    }
 
-
+    @Override
+    public ResponseEntity<List<JobPostingDTO>> getJobPostingsByStatus(PostingStatus postingStatus) {
+        return ResponseEntity.ok(jobRepository.findByStatus(postingStatus)
+                .stream()
+                .map(JobPostingDTO::mapToDTO)
+                .toList());
+    }
 }

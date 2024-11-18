@@ -2,6 +2,7 @@ package org.ietdavv.alumni_portal.controller;
 
 import lombok.AllArgsConstructor;
 import org.ietdavv.alumni_portal.dto.JobPostingDTO;
+import org.ietdavv.alumni_portal.entity.PostingStatus;
 import org.ietdavv.alumni_portal.service.JobService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,8 +18,17 @@ public class JobPostingController {
     private final JobService service;
 
     @GetMapping("/postings")
-    public ResponseEntity<List<JobPostingDTO>> getPostings() {
-        return service.getJobPostings();
+    public ResponseEntity<List<JobPostingDTO>> getPostings(
+            @RequestParam(name = "status", required = false) String status) {
+        if (status == null)
+            return service.getJobPostings();
+        return service.getJobPostingsByStatus(PostingStatus.APPROVED);
+    }
+
+
+    @GetMapping("/posting/{id}")
+    public ResponseEntity<JobPostingDTO> getPostingById(@PathVariable Long id) {
+        return service.getJobPostingById(id);
     }
 
     @GetMapping("/posting?requirements={req}")
@@ -53,5 +63,11 @@ public class JobPostingController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deletePosting(@PathVariable(name = "id") Long id) {
         return service.deleteJobPosting(id);
+    }
+
+    @GetMapping("/posting/username/{username}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ALUMNI')")
+    public ResponseEntity<?> getJobPostingByUsername(@PathVariable(name = "username") String username) {
+        return service.getJobPostingByUsername(username);
     }
 }

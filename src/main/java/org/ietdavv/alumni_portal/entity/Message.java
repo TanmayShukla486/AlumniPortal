@@ -23,8 +23,8 @@ public class Message {
     private String receiver;
     @Column(name = "content")
     private String content;
-    @Column(name = "created")
-    private String created;
+    @Column(name = "timestamp")
+    private String timestamp;
     @ManyToOne
     @JoinColumn(name = "room_id")
     @JsonBackReference

@@ -24,4 +24,8 @@ public class ResponseMessage {
     public static final String EVENT_NOT_FOUND = "Event Not found";
     public static final String NOTICE_NOT_FOUND = "Notice Not found";
     public static final String JOB_NOT_FOUND = "Job posting not found";
+    public static final String INVALID_VALUE = "Invalid input value";
+    public static final String BAD_REQUEST = "Bad request";
+    public static final String POSTING_NOT_FOUND = "Posting not found";
+    public static final String LIKE_NOT_FOUND = "No such like found";
 }

@@ -17,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -28,11 +30,22 @@ public class BlogService implements BlogServiceInterface {
     private final CategoryRepository categoryRepository;
     private final LikeRepository likeRepository;
 
-
+    private void mapLikedBy(List<BlogDTO> blogs) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        PortalUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.USER_NOT_FOUND));
+        List<Like> list = likeRepository.findByTypeAndLikedBy(LikeEntity.BLOG, user);
+        Set<Long> ids = new HashSet<>();
+        for (Like like: list) ids.add(like.getEntityId());
+        for (BlogDTO blog: blogs) {
+            if (ids.contains(blog.getId())) blog.setAlreadyLiked(true);
+        }
+    }
 
     @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getAllBlogs() {
         List<BlogDTO> blogs = blogRepository.findAll().stream().map(BlogDTO::mapToDTO).toList();
+        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -53,6 +66,7 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
+        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -76,6 +90,7 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
+        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
@@ -87,17 +102,17 @@ public class BlogService implements BlogServiceInterface {
 
     @Override
     public ResponseEntity<ResponseDTO<List<BlogDTO>>> getLatestBlogs() {
+        List<BlogDTO> blogs = blogRepository
+                .findAllByOrderByCreatedAtDesc()
+                .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
+                .stream()
+                .map(BlogDTO::mapToDTO)
+                .toList();
+        mapLikedBy(blogs);
         return ResponseEntity.ok(ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)
                         .message(ResponseMessage.SUCCESS)
-                        .data(
-                                blogRepository
-                                        .findAllByOrderByCreatedAtDesc()
-                                        .orElseThrow(() -> new ResourceNotFoundException(ResponseMessage.BLOG_NOT_FOUND))
-                                        .stream()
-                                        .map(BlogDTO::mapToDTO)
-                                        .toList()
-                        )
+                        .data(blogs)
                 .build());
     }
 
@@ -131,6 +146,7 @@ public class BlogService implements BlogServiceInterface {
                 .stream()
                 .map(BlogDTO::mapToDTO)
                 .toList();
+        mapLikedBy(blogs);
         return ResponseEntity.ok(
                 ResponseDTO.<List<BlogDTO>>builder()
                         .statusCode(200)

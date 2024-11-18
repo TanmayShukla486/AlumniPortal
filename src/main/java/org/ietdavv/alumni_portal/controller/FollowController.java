@@ -34,12 +34,12 @@ public class FollowController {
     }
 
     @PostMapping("/{username}/follow")
-    public ResponseEntity<ResponseDTO<String>> followUser(@PathVariable String username) {
+    public ResponseEntity<FollowDTO> followUser(@PathVariable String username) {
         return followService.followUser(username);
     }
 
     @DeleteMapping("/{username}/unfollow")
-    public ResponseEntity<ResponseDTO<String>> unfollowUser(@PathVariable String username) {
+    public ResponseEntity<Long> unfollowUser(@PathVariable String username) {
         return followService.unFollowUser(username);
     }
 

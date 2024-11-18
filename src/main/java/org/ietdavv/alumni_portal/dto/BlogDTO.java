@@ -21,6 +21,7 @@ public class BlogDTO {
     private String author;
     private String content;
     private int likes;
+    private boolean alreadyLiked;
     private boolean commentsEnabled;
     private int commentCount;
     private Date createdAt;

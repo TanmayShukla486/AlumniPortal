@@ -13,4 +13,5 @@ public interface CommentServiceInterface {
     ResponseEntity<ResponseDTO<String>> deleteComment(long commentId);
     ResponseEntity<ResponseDTO<List<CommentDTO>>> getCommentByBlogAndUser(long blogId, String username);
 
+    ResponseEntity<List<CommentDTO>> getCommentsByUser(String username);
 }

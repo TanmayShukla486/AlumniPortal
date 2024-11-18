@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.ietdavv.alumni_portal.dto.*;
 import org.ietdavv.alumni_portal.entity.*;
 import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
+import org.ietdavv.alumni_portal.error_handling.errors.InvalidValueException;
 import org.ietdavv.alumni_portal.error_handling.errors.ResourceNotFoundException;
 import org.ietdavv.alumni_portal.error_handling.errors.RoleNotFoundException;
 import org.ietdavv.alumni_portal.repository.UserRepository;
@@ -236,5 +237,37 @@ public class UserService implements UserServiceInterface {
                 .stream()
                 .map(PortalUser::getUsername)
                 .toList());
+    }
+
+    @Override
+    public ResponseEntity<List<CompactAlumniDTO>> getAlumniByNameAndYear(String name, Integer year) {
+        if (year > Calendar.getInstance().getWeekYear())
+            throw new InvalidValueException(ResponseMessage.INVALID_VALUE);
+        return ResponseEntity.ok(
+                repository.findByRoleAndGraduationYearAndUsernameContaining(Role.ROLE_ALUMNI, year, name)
+                        .stream()
+                        .map(CompactAlumniDTO::mapToDTO)
+                        .toList()
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<CompactAlumniDTO>> getAlumniByYear(Integer year) {
+        return ResponseEntity.ok(
+                repository.findByRoleAndGraduationYear(Role.ROLE_ALUMNI, year)
+                        .stream()
+                        .map(CompactAlumniDTO::mapToDTO)
+                        .toList()
+        );
+    }
+
+    @Override
+    public ResponseEntity<List<CompactAlumniDTO>> getAlumniByName(String name) {
+        return ResponseEntity.ok(
+                repository.findByRoleAndUsernameContaining(Role.ROLE_ALUMNI, name)
+                        .stream()
+                        .map(CompactAlumniDTO::mapToDTO)
+                        .toList()
+        );
     }
 }

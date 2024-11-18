@@ -1,5 +1,6 @@
 package org.ietdavv.alumni_portal.repository;
 
+import org.ietdavv.alumni_portal.dto.CommentDTO;
 import org.ietdavv.alumni_portal.entity.Blog;
 import org.ietdavv.alumni_portal.entity.Comment;
 import org.ietdavv.alumni_portal.entity.PortalUser;
@@ -12,4 +13,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<List<Comment>> findByBlogAndCommenter(Blog blog, PortalUser commenter);
 
+    List<Comment> findByCommenter(PortalUser user);
 }

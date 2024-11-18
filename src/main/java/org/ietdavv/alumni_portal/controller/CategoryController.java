@@ -23,13 +23,13 @@ public class CategoryController {
 
     @PostMapping("/admin/category")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(CategoryDTO category) {
+    public ResponseEntity<ResponseDTO<CategoryDTO>> addCategory(@RequestBody CategoryDTO category) {
         return categoryService.addCategory(category);
     }
 
     @DeleteMapping("/admin/category")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ResponseDTO<String>> deleteCategory(@RequestParam(name = "name") String category) {
+    public ResponseEntity<String> deleteCategory(@RequestParam(name = "name") String category) {
         return categoryService.removeCategory(category);
     }
 

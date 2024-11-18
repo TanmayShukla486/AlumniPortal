@@ -50,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Allow your frontend origin
+        config.setAllowedOrigins(List.of("http://localhost:5173", "https://stable-tarpon-fine.ngrok-free.app")); // Allow your frontend origin
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow specific methods
         config.setAllowedHeaders(List.of("*")); // Allow all headers
         config.setAllowCredentials(true); // If using credentials (optional)
