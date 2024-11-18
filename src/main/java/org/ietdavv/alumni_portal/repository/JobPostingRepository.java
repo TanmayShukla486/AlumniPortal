@@ -16,4 +16,6 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     List<JobPosting> findByJobRequirementsContaining(String req);
 
     List<JobPosting> findByStatus(PostingStatus postingStatus);
+
+    Long countByStatus(PostingStatus postingStatus);
 }
