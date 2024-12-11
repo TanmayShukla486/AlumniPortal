@@ -24,6 +24,7 @@ public class CompactContentDTO {
                 .id(blog.getId())
                 .username(blog.getAuthor().getUsername())
                 .title(blog.getTitle())
+                .createdAt(blog.getCreatedAt().toString())
                 .content(blog.getContent()).build();
     }
 
@@ -32,6 +33,7 @@ public class CompactContentDTO {
                 .id(blog.getBlog().getId())
                 .username(blog.getCommenter().getUsername())
                 .title("Comment")
+                .createdAt(blog.getCreatedAt().toString())
                 .content(blog.getContent()).build();
     }
 }

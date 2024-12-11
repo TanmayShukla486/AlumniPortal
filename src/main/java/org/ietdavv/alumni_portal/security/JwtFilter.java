@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.ietdavv.alumni_portal.error_handling.ResponseMessage;
+import org.ietdavv.alumni_portal.error_handling.errors.InvalidCredentials;
 import org.ietdavv.alumni_portal.service.MyUserDetailsService;
 import org.ietdavv.alumni_portal.service.interfaces.JwtServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
         log.debug(request.getHeader("Authorization"));
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer")) {
+            if (authHeader.length() <= 7) throw new InvalidCredentials(ResponseMessage.UNAUTHORIZED);
             token = authHeader.substring(7);
             log.debug(token);
             username = service.extractUsername(token);

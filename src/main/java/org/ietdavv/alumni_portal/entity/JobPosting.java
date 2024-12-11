@@ -31,6 +31,8 @@ public class JobPosting {
     private int salary;
     @Column(name = "apply_link", nullable = false)
     private String link;
+    @Column(name = "company")
+    private String company;
     @ManyToOne
     @JoinColumn(name = "posted_by_id")
     private PortalUser alumni;

@@ -93,6 +93,7 @@ public class AdminController {
     public ResponseEntity<ImportantInfoDTO> getImportant() {
         List<CompactInfoDTO> events = adminService.getEvents();
         List<CompactInfoDTO> jobs = adminService.getJobs();
+        return ResponseEntity.ok(ImportantInfoDTO.builder().events(events).jobs(jobs).build());
     }
 
 }

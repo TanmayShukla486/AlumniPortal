@@ -71,7 +71,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/login").permitAll()
                                 .requestMatchers("/api/register").permitAll()
                                 .requestMatchers("/chat**").permitAll()
-                                .requestMatchers("/styles.css", "/script.js", "/index.html").permitAll()
+                                .requestMatchers("/assets/**", "/index.html").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
